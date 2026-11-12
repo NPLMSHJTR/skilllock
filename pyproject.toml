@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skilllock"
+version = "0.1.0"
+description = "A lockfile for Agent Skills: pin versions, verify content, record the resolved dependency closure."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "NPLMSHJTR" }]
+keywords = ["agent-skills", "lockfile", "supply-chain", "codex", "reproducible"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Console",
+]
+dependencies = []
+
+[project.scripts]
+skilllock = "skilllock.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/NPLMSHJTR/skilllock"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

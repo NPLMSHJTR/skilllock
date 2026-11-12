@@ -1,0 +1,3 @@
+# Line endings must be stable: skilllock hashes bytes, so a CRLF checkout
+# would produce different hashes from an LF one. Required, not optional.
+* text=auto eol=lf
