@@ -295,4 +295,12 @@ def render(lock: Lockfile) -> str:
 
 
 def write(lock: Lockfile, path: Path) -> None:
-    path.write_text(render(lock), encoding="utf-8", newline="\n")
+    """Write a lockfile with LF endings on every platform.
+
+    `Path.write_text(newline=...)` only exists from Python 3.10, so the file is
+    opened explicitly. A lockfile with CRLF endings would differ per platform for
+    no reason, which is the kind of noise that makes a diff unreadable.
+    """
+    text = render(lock)
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(text)
