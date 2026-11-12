@@ -104,3 +104,20 @@ def test_tomllib_import_is_optional():
     assert hasattr(lf, "_tomllib") or sys.version_info < (3, 11)
     # The fallback must exist regardless.
     assert callable(lf._parse_fallback)
+
+
+def test_rejection_works_without_tomllib(tmp_path: Path, monkeypatch):
+    """A bad file is still refused on 3.9, just with a different message."""
+    monkeypatch.setattr(lf, "_tomllib", None)
+    path = tmp_path / FILENAME
+    path.write_text("version = [unclosed\n", encoding="utf-8")
+    with pytest.raises(lf.LockfileError):
+        read(path)
+
+
+def test_unknown_version_rejected_without_tomllib(tmp_path: Path, monkeypatch):
+    monkeypatch.setattr(lf, "_tomllib", None)
+    path = tmp_path / FILENAME
+    path.write_text('version = 7\n\n[[skill]]\nname = "a"\n', encoding="utf-8")
+    with pytest.raises(lf.LockfileError, match="unsupported lockfile version 7"):
+        read(path)
